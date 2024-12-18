@@ -1,6 +1,6 @@
 #
 # This is an RGB LED exerciser for the
-# ESP32 S3 Zero Development Board as
+# ESP32 S3 Supermini Development Board as
 # Found on AliExpess.
 #
 # The relative weights of the colors are
@@ -14,7 +14,7 @@ from time import sleep
 from neopixel import NeoPixel
 from random import randrange
 
-pin = Pin(48, Pin.OUT)  # Pin for RGB led on ESP32-S3 ZERO
+pin = Pin(48, Pin.OUT)  # Pin for RGB led on ESP32-S3 Supermini
 led = NeoPixel(pin, 1)  # "1" = one RGB led on the "led bus"
 
 while True:
