@@ -1,5 +1,6 @@
 # ESP32
 Various ESP32 projects
+
 I am a coder with >30 years experience. In the dim past, I modified industrial
 analog controllers with knobs and switches to enable control via computer.
 
