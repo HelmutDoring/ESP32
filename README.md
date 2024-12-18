@@ -2,7 +2,7 @@
 Various ESP32 projects
 
 I am a coder with >30 years experience. In the dim past, I modified industrial
-analog controllers with knobs and switches to enable control via computer.
+analog controllers (knobs and switches) to use software control.
 
 I recently purchased a few turnkey LoRa nodes and was immediately struck by the
 poor quality of ALL of the software. Not trying to knock the radio folks, but
