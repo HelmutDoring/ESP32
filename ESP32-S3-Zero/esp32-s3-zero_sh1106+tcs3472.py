@@ -15,10 +15,9 @@ def getrgb():
     bus = SoftI2C(sda=Pin(SDA), scl=Pin(SCL))
     tcs = tcs3472(bus, 0x29)  # Default address for tcs3472
     color = tcs.rgb()
-    sleep(1)
+    sleep(0.2)
     p0.off()
-    sleep(1)
-    #p0.off()  # Turn off LED's
+    sleep(2)
     return color
 
 
@@ -32,11 +31,11 @@ def write_oled(rgb):
     oled.sleep(False)
     oled.fill(0)
     msg = ", ".join(map(str, rgb))
-    oled.text(msg, 0, 32, 1)
+    oled.text(msg, 0, 28, 1)
     oled.show()
 
 
-p0 = Pin(4, Pin.OUT)  # cfg pin 10 to control illumination LEDs on RGB sensor
+p0 = Pin(4, Pin.OUT)  # cfg pin to control illumination LEDs on RGB sensor
 while True:
     write_oled(getrgb())
 
