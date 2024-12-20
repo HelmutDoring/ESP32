@@ -1,2 +1,2 @@
-The ESP32-S3-Zero is a little bit of a problem. It doesn't have a toplevel board directory. Not even /pyboard/. I was able to use rshell to upload directories named 'bin' and 'lib', but it doesn't seem to like any other directory names I've tried.
-People have raised the issue of boards with toplevel directories named '[]' with the author of rshell. He doesn't seem too interested in the problem.
+The ESP32-S3-Zero REQUIRES the "FLASH 4M" version of MicroPython: i.e: ESP32_GENERIC_S3-FLASH_4M-20241129-v1.24.1.bin
+If you install the wrong version, there will be no /pyboard/ directory and you will experience all sorts of weird behavior.
