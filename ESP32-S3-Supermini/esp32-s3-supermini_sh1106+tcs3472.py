@@ -23,8 +23,8 @@ def write_oled(rgb):
     SDA = 8 # Ditto.
     RST = 4 # This pin is commonly marked "EN"
     FREQ = 1000000
-    i2c = SoftI2C(scl=Pin(SCL), sda=Pin(SDA), freq=FREQ)
-    oled = sh1106.SH1106_I2C(128, 64, i2c, Pin(RST), 0x3C)
+    bus = SoftI2C(scl=Pin(SCL), sda=Pin(SDA), freq=FREQ)
+    oled = sh1106.SH1106_I2C(128, 64, bus, Pin(RST), 0x3C)
     oled.sleep(False)
     oled.fill(0)
     msg = ', '.join(map(str, rgb))
