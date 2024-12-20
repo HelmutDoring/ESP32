@@ -1,1 +1,1 @@
-
+The ESP32-S3-Supermini is a surprisingly nice board to work with. So far I can do anything that I can do on a "big" board just as well on the Supermini! The pinouts are not consistent on boards even from the same source a week apart, so be careful!
