@@ -11,7 +11,6 @@ def getrgb():
     p0.on()  # Turn on LED's
     SCL = 12  # Or whatever public pin you choose
     SDA = 11  # Or whatever public pin you choose
-
     bus = SoftI2C(sda=Pin(SDA), scl=Pin(SCL))
     tcs = tcs3472(bus, 0x29)  # Default address for tcs3472
     color = tcs.rgb()
@@ -20,9 +19,9 @@ def getrgb():
 
 
 def write_oled(rgb):
-    SCL = 9
-    SDA = 8
-    RST = 4
+    SCL = 9 # Or whatever... etc.
+    SDA = 8 # Ditto.
+    RST = 4 # This pin is commonly marked "EN"
     FREQ = 1000000
     i2c = SoftI2C(scl=Pin(SCL), sda=Pin(SDA), freq=FREQ)
     oled = sh1106.SH1106_I2C(128, 64, i2c, Pin(RST), 0x3C)
@@ -32,8 +31,8 @@ def write_oled(rgb):
     oled.text(msg, 0, 32 , 1)
     oled.show()
 
+
+p0 = Pin(10, Pin.OUT)  # cfg pin 10 to control illuminator LEDs
 while True:
-    p0 = Pin(10, Pin.OUT)  # cfg pin 10 to control LED illuminators
     write_oled(getrgb())
     sleep(1)
-
