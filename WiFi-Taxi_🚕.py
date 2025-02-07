@@ -28,6 +28,8 @@ while ap.active() == False:
 
 print("AP is active")
 print(ap.ifconfig())
+
+
 def web_page():
     html = """ 
              <html>
@@ -65,7 +67,6 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(("0.0.0.0", 80))
 s.listen(5)
 
-
 while True:
     conn, addr = s.accept()
     request = conn.recv(1024).decode()
@@ -73,4 +74,4 @@ while True:
     response = web_page()
     conn.send(response)
     conn.close()
-
+    
