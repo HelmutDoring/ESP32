@@ -1,12 +1,15 @@
 #
+# Blame: helmut.doring@slug.org
+#
 # Notes:
 #
-#   LLCC68 wants 5V
+#   LLCC68 wants 5V, or so I'm told.
 #
 
 import time
 import sys
 
+# On my ESP32's I store my hardware libs like this:
 sys.path.append("hwlib/e220")
 
 from machine import UART, Pin
@@ -48,6 +51,7 @@ UART_ID = 2
 
 CHAN = 65  # Frequency: Base Freq 850.125 + 65 = 915.125
 
+###
 #
 # Many of the config settings are optional,
 # but are included here as examples.
@@ -81,7 +85,7 @@ cfg_900t22d.TRANSMISSION_MODE.enableLBT = LbtEnableByte.LBT_DISABLED
 
 cfg_900t22d.CRYPT.CRYPT_H = 1
 cfg_900t22d.CRYPT.CRYPT_L = 1
-## END OF CONFIG
+### END OF CONFIG
 
 
 def print_config(lora):
