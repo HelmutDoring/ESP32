@@ -1,7 +1,6 @@
 # Captive Portal!
 #
-# Based on somebody elses async example code -
-# If that's you, I'd be happy to credit it!
+# Based on https://github.com/metachris/micropython-captiveportal
 #
 # Blame: helmut.doring@slug.org
 #
