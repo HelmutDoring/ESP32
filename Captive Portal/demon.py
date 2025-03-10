@@ -1,10 +1,10 @@
 # Captive Portal!
 #
+# Based on somebody elses async example code -
+# If that's you, I'd be happy to credit it!
+#
 # Blame: helmut.doring@slug.org
 #
-
-from machine import Pin, PWM
-from neopixel import NeoPixel
 
 import usocket as socket
 
@@ -17,8 +17,6 @@ import sys
 
 import network
 import uasyncio as asyncio
-
-ONBOARD_RGB_LED_PIN = 8
 
 HTTP_PORT = 80
 DNS_PORT = 53
@@ -33,29 +31,12 @@ SERVER_IP = "10.11.12.13"
 SERVER_SUBNET = "255.255.255.0"
 
 
-def turn_off_led(P):
-    pin = Pin(P, Pin.OUT)
-    led = NeoPixel(pin, 1)
-    led[0] = (0, 0, 0)
-    led.write()
-
-
 def free():
     F = gc.mem_free()
     A = gc.mem_alloc()
     T = F + A
     P = "{0:.2f}%".format(F / T * 100)
     return "Total:{0} Free:{1} ({2})".format(T, F, P)
-
-
-def swap_boot(script):
-    fname = "/captive_portal/" + script
-    f = open(fname)
-    data = f.read()
-    f.close()
-    f = open("/boot.py", "w")
-    f.write(data)
-    f.close()
 
 
 # 20dB is 100mW, but my XAIO Seeed S3 says 73mW which is ~18.5dB.
@@ -182,8 +163,6 @@ class MyApp:
 
 
 ### Main ###
-turn_off_led(ONBOARD_RGB_LED_PIN)
-
 try:
     # Instantiate app and run
     myapp = MyApp()
