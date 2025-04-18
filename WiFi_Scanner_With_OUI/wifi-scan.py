@@ -45,7 +45,6 @@ def oui_text_search(hex):
     oui_db = f"./ouitext/{hex[0:1]}.txt"
     with open(oui_db, "r") as file:
         for line in file:
-            line = line.strip()
             if line[:8] == hex:
                 file.close()
                 return line.strip()
