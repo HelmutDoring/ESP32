@@ -52,9 +52,6 @@ def oui_text_search(hex):
                 return line.strip()
 
 
-fname = "ouitext directory"
-
-
 def oui_db_search(hex):
     if "ouidict" not in sys.modules:
         from ouidict import ouidict
