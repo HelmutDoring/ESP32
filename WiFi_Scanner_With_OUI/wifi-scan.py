@@ -9,6 +9,9 @@
 import sys
 import network
 
+red_ball = "🔴"
+green_ball = "🟢"
+
 
 class WifiManager:
     def __init__(self):
@@ -45,6 +48,7 @@ def oui_text_search(hex):
     oui_db = f"./ouitext/{hex[0:1]}.txt"
     with open(oui_db, "r") as file:
         for line in file:
+            # line = line.strip()
             if line[:8] == hex:
                 file.close()
                 return line.strip()
@@ -77,6 +81,8 @@ network.WLAN(network.AP_IF).active(False)
 # We're only listening, so don't need POWER.
 ap.config(txpower=2, pm=network.WLAN.PM_NONE)
 
+f = open("wifi-scan-output.txt", "a")
+
 i = 0
 for ssid, bssid, channel, RSSI, authmode, hidden in ap.scan():
     i += 1
@@ -89,13 +95,24 @@ for ssid, bssid, channel, RSSI, authmode, hidden in ap.scan():
     mode = authmodes[authmode]
     hidden = "(hidden)" if hidden else ""
 
-    print(f"{i}: {ssid.decode()}")
-    print(f"   - Auth: {mode} {hidden}")
-    print(f"   - Channel: {channel}")
-    print(f"   - RSSI: {RSSI}")
-    print(f"   - BSSID: {mac}")
-    print(f"   - MFG: {mfg}")
-    print()
+    if mode == "Open":
+        ball = red_ball
+    else:
+        ball = green_ball
 
+    result = (
+        f"{i}: {ssid.decode()}\n"
+        f"   - Auth: {ball} {mode} {hidden}\n"
+        f"   - Channel: {channel}\n"
+        f"   - RSSI: {RSSI}\n"
+        f"   - BSSID: {mac}\n"
+        f"   - MFG: {mfg}\n"
+    )
+
+    f.write(f"{result}\n")
+    print(result)
+    result = ""
+
+f.close()
 ap.active(False)
 sys.exit()
