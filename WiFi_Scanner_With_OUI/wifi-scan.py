@@ -52,18 +52,15 @@ authmodes = [
 ]
 
 network.WLAN(network.STA_IF).active(False)
-
 ap = network.WLAN(network.STA_IF)
 ap.active(True)
-
 network.WLAN(network.AP_IF).active(False)
-
 # We're only listening, so don't need POWER.
 ap.config(txpower=2, pm=network.WLAN.PM_NONE)
 
 f = open("wifi-scan-output.txt", "a")
-
 i = 0
+
 for ssid, bssid, channel, RSSI, authmode, hidden in ap.scan():
     i += 1
 
