@@ -51,15 +51,15 @@ def df():
     print(f"Disk: {used} kB used of {total} ({free} free)")
 
 
-def free(full=False):
+def free():
     gc.collect()
-    F = gc.mem_free()
-    A = gc.mem_alloc()
-    T = F + A
-    F = int(F / 1024)
-    T = int(T / 1024)
-    P = int(T - F)
-    print(f"RAM: {P} kB used of {T} ({F} free)")
+    free = gc.mem_free()
+    alloc = gc.mem_alloc()
+    total = free + alloc
+    free = int(free / 1024)
+    total = int(total / 1024)
+    used = int(total - free)
+    print(f"RAM: {used} kB used of {total} ({free} free)")
 
 
 df()
