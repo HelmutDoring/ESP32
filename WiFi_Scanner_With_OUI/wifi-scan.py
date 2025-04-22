@@ -47,8 +47,8 @@ authmodes = [
     "WPA2-PSK",
     "WPA/WPA2-PSK",
     "WPA2-ENTERPRISE",
+    "UNKNOWN (MODE 6)",
     "WPA2/WPA3",
-    "UNKNOWN (MODE 7)",
 ]
 
 network.WLAN(network.STA_IF).active(False)
