@@ -84,7 +84,7 @@ class DNSQuery:
         packet += (
             self.data[4:6] + self.data[4:6] + b"\x00\x00\x00\x00"
         )  # Questions and Answers Counts
-        packet += self.data[12:]  # Original Domain Name Question
+        packet += self.data[12:]  # Original Domain Name Query
         packet += b"\xc0\x0c"  # Pointer to domain name
         # response type, ttl, and data length (4 bytes)
         packet += b"\x00\x01\x00\x01\x00\x00\x00\x3c\x00\x04"
