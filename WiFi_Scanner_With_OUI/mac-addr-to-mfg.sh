@@ -7,13 +7,8 @@
 ## referred to as the Organizationally Unique Identifier
 ## of the Wifi AP hardware.
 ##
-## Download the canonical OUI datafile from:
-##
-##   https://standards-oui.ieee.org/oui/oui.txt
-##
-## Put that in a directory along with this script.
-##
-## Running this script with no arguments will create
+## Running this script with no arguments will download
+## the canonical OUI datafile and parse it to create
 ## 3 derived formats that can be used to map the
 ## hardware MAC addresses of WiFi access points to
 ## the names of their manufacturers.
@@ -46,9 +41,27 @@ outfile_dict='ouidict.py'
 outfile_text='ouitext.txt'
 outfile_textdir='ouitext'
 
-mkdir "$outfile_textdir"
+if [ -f oui.txt ]; then
+  mv oui.txt oui.txt.bak
+fi
 
-hexpat='([0-9A-F]{2}-[0-9A-F]{2}-[0-9A-F]{2})\s+\(hex\)\s+([^]+)'
+curl -L -o oui.txt https://standards-oui.ieee.org/oui/oui.txt
+
+if [ -f "$outfile_dict" ]; then
+  mv "$outfile_dict" ${outfile_dict}.bak
+fi
+
+if [ -f "$outfile_text" ]; then
+  mv "$outfile_text" ${outfile_text}.bak
+fi
+
+if [ -d "$outfile_textdir" ]; then
+  rm -rf "$outfile_textdir"
+  mkdir "$outfile_textdir"
+fi
+
+hexpat='([0-9A-F]{2}-[0-9A-F]{2}-[0-9A-F]{2})\s+\(hex\)\s+([^
+]+)'
 
 echo '# Simple text formatted OUI database'>"$outfile_text"
 
