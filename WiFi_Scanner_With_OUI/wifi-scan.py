@@ -13,6 +13,7 @@
 # Blame: helmut.doring@slug.org
 #
 
+import os
 import sys
 import network
 
@@ -35,8 +36,12 @@ def oui_text_search(hex):
 
 
 def oui_db_search(hex):
-    if "ouidict" not in sys.modules:
-        from ouidict import ouidict
+    try:
+        if "ouidict" not in sys.modules:
+            from ouidict import ouidict
+    except Exception as e:
+        print(f"Exception while loading ouidict.py: {e}")
+        sys.exit()
     return ouidict[hex]
 
 
@@ -47,7 +52,7 @@ authmodes = [
     "WPA2-PSK",
     "WPA/WPA2-PSK",
     "WPA2-ENTERPRISE",
-    "UNKNOWN (MODE 6)",
+    "UNKNOWN",
     "WPA2/WPA3",
 ]
 
@@ -91,5 +96,8 @@ for ssid, bssid, channel, RSSI, authmode, hidden in ap.scan():
     result = ""
 
 f.close()
+ap = network.WLAN(network.AP_IF)
+if ap.isconnected():
+    ap.disconnect()
 ap.active(False)
-sys.exit()
+sys.exit(0)
