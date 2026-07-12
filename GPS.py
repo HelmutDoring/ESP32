@@ -81,6 +81,18 @@ def rolling_averages():
     sat.append(my_gps.satellites_in_use)
     # caller should dereference mean(lat) etc.
 
+
+def in_motion():
+    vlat = variance(lat)
+    vlon = variance(lon)
+
+    # 1e-8 is probably a good value
+    if (abs(vlat) + abs(vlon)) > 1e-10:
+        return True
+    else:
+        return False
+    
+    
 def main():
     while True:
         if gps_serial.any():
@@ -97,13 +109,14 @@ def main():
             # If all is well
             if my_gps.valid:
                 rolling_averages()
-                if mean(kph) >= 2:
-                    #logfile.write(f"{ISO_time()} ")
+                if in_motion():
+                    logfile.write(f"{ISO_time()} {mean(lat)}, {mean(lon)} {mean(kph)} K/hr")
                     print(f"ISO Time: {ISO_time()}")
                     print_location()
                     print(f"https://www.google.com/maps/search/?api=1&query={mean(lat)}%2C{mean(lon)}")
         
         sleep(0.2)
+
 
 if __name__ == "__main__":
     try:
