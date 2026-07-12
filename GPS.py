@@ -8,7 +8,7 @@ TZ_OFFSET = -7
 LOG_FILE = 'GPS_Log.txt'
 logfile = open(LOG_FILE, "a")
 
-ISO_FMT = '20{:02d}-{:02d}-{:02d}T{:02d}:{:02d}:{:02d}{:6s}'
+ISO_DATETIME_FMT = '20{:02d}-{:02d}-{:02d}T{:02d}:{:02d}:{:02d}{:6s}'
 
 # 1. Initialize UART
 gps_serial = UART(2, baudrate=9600, tx=Pin(11), rx=Pin(12))
@@ -35,7 +35,7 @@ def stdev(data):
 
 def ISO_time():
     # Format: YYYY-MM-DDTHH:MM:SSZ
-    iso_date_str = ISO_FMT.format(
+    iso_date_str = ISO_DATETIME_FMT.format(
         my_gps.date[2],           # Year (e.g., 26 for 2026)
         my_gps.date[1],           # Month
         my_gps.date[0],           # Day
@@ -87,6 +87,7 @@ def in_motion():
     vlon = variance(lon)
 
     # 1e-8 is probably a good value
+    # 1e-10 is good for testing indoors
     if (abs(vlat) + abs(vlon)) > 1e-10:
         return True
     else:
@@ -110,10 +111,10 @@ def main():
             if my_gps.valid:
                 rolling_averages()
                 if in_motion():
-                    logfile.write(f"{ISO_time()} {mean(lat)}, {mean(lon)} {mean(kph)} K/hr")
+                    logfile.write(f"{ISO_time()} {mean(lat)}, {mean(lon)} {mean(kph)} K/hr\n")
+                    print(f"https://www.google.com/maps/search/?api=1&query={mean(lat)}%2C{mean(lon)}")
                     print(f"ISO Time: {ISO_time()}")
                     print_location()
-                    print(f"https://www.google.com/maps/search/?api=1&query={mean(lat)}%2C{mean(lon)}")
         
         sleep(0.2)
 
