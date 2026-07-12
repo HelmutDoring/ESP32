@@ -111,7 +111,7 @@ def main():
             if my_gps.valid:
                 rolling_averages()
                 if in_motion():
-                    logfile.write(f"{ISO_time()} {mean(lat)}, {mean(lon)} {mean(kph)} K/hr\n")
+                    logfile.write(f"{ISO_time()} {mean(lat):9.6f}, {mean(lon):9.6f} {mean(kph):7.4f} K/hr\n")
                     print(f"https://www.google.com/maps/search/?api=1&query={mean(lat)}%2C{mean(lon)}")
                     print(f"ISO Time: {ISO_time()}")
                     print_location()
