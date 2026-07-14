@@ -17,6 +17,8 @@ import os
 import sys
 import network
 
+oui_text_dir = "./lib/ouitext"
+
 red_ball = "🔴"
 green_ball = "🟢"
 
@@ -26,7 +28,7 @@ def mac_fmt(bssid):
 
 
 def oui_text_search(hex):
-    oui_db = f"./ouitext/{hex[0:1]}.txt"
+    oui_db = f"{oui_text_dir}/{hex[0:1]}.txt"
     with open(oui_db, "r") as file:
         for line in file:
             # line = line.strip()
@@ -58,6 +60,8 @@ authmodes = [
 
 network.WLAN(network.STA_IF).active(False)
 ap = network.WLAN(network.STA_IF)
+if ap.isconnected():
+        ap.disconnect()
 ap.active(True)
 network.WLAN(network.AP_IF).active(False)
 # We're only listening, so don't need POWER.
@@ -70,10 +74,14 @@ for ssid, bssid, channel, RSSI, authmode, hidden in ap.scan():
     i += 1
 
     mac = mac_fmt(bssid)
-    # uncomment the next line for text-based search.
-    mfg = oui_text_search(mac[:8].upper())
-    # uncomment the next line to use the Python dict.
-    # mfg = oui_db_search(mac[:8].upper())
+    try:
+        # uncomment the next line for text-based search.
+        mfg = oui_text_search(mac[:8].upper())[11:]
+        # uncomment the next line to use the Python dict.
+        # mfg = oui_db_search(mac[:8].upper())
+    except Exception:
+        mfg = "No OUI data file found!"       
+    
     mode = authmodes[authmode]
     hidden = "(hidden)" if hidden else ""
 
@@ -83,10 +91,9 @@ for ssid, bssid, channel, RSSI, authmode, hidden in ap.scan():
         ball = green_ball
 
     result = (
-        f"{i}: {ssid.decode()}\n"
+        f"{i}: {ssid.decode('utf8')}\n"
         f"   - Auth: {ball} {mode} {hidden}\n"
-        f"   - Channel: {channel}\n"
-        f"   - RSSI: {RSSI}\n"
+        f"   - Channel: {channel} RSSI: {RSSI}\n"
         f"   - BSSID: {mac}\n"
         f"   - MFG: {mfg}\n"
     )
@@ -101,3 +108,4 @@ if ap.isconnected():
     ap.disconnect()
 ap.active(False)
 sys.exit(0)
+
