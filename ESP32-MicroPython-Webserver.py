@@ -8,11 +8,13 @@
 
 import re, sys, time, network, ubinascii, uasyncio, gc
 
+import secrets
+
 DEBUG = True
 counter = 0
 port = 8080
-ssid = "MY_ESSID"
-password = "MY_PASSWORD"
+ssid = secrets.ssid
+password = secrets.password
 myip = "192.168.1.111"
 netmask = "255.255.255.0"
 gateway = "192.168.1.254"

@@ -2,8 +2,6 @@
 #
 # Report memory and disk usage of an esp32 board
 #
-# Now uses ouitext OUI database from wifi-scanner.py
-#
 # Blame: helmut.doring@slug.org
 #
 
@@ -15,23 +13,22 @@ import gc
 import sys
 import machine
 
+
 def oui_text_search(hex):
-    oui_db = f"./ouitext/{hex[0:1]}.txt"
-    print(f"{oui_db}")
+    oui_db = f"./lib/ouitext/{hex[0:1]}.txt"
     with open(oui_db, "r") as file:
         for line in file:
             if line[:8] == hex:
                 file.close()
                 return line.strip()
 
-# For the sake of consistency, the MAC address is
-# the unique i.d. in MicroPython. Note that the
+
 # IEEE defines the OUI assignments, and there
 # are 224 assigned to Espressif!
 mac_addr = machine.unique_id()
 mac_addr = "{:02x}:{:02x}:{:02x}:{:02x}:{:02x}:{:02x}".format(*mac_addr)
 print(f"Unique ID: {mac_addr}")
-mfg = oui_text_search(mac_addr[:8].upper())
+mfg = oui_text_search(mac_addr[:8].upper())[11:]
 print(f"OUI Manufacturer: {mfg}")
 print(f"pyboard: {sys.platform}")
 
@@ -44,6 +41,9 @@ def tree(root):
             if fsize > 1024:
                 fsize = int(fsize / 1024)
                 unit = "kB"
+            elif fsize == 0:
+                fsize = ''
+                unit = ''
             else:
                 unit = "B"
             print(f"{root}/{dirent} {fsize} {unit}")
@@ -54,13 +54,13 @@ def tree(root):
 
 def df():
     s = esp.flash_size()
-    print(f"Flash size: {int(s / 1024)} kB")
+    print(f"Flash(kB): {int(s / 1024)}")
     # os.statvfs reports BLOCKS, not bytes
     s = os.statvfs("/")
     total = int(s[0] * s[2] / 1024)
-    free = s[0] * int(s[3] / 1024)
+    free = int(s[0] * s[3] / 1024)
     used = total - free
-    print(f"Disk: {used} kB used of {total} ({free} free)")
+    print(f"DISK(kB) - Total: {total} Used: {used} Free: {free}")
 
 
 def free():
@@ -71,7 +71,7 @@ def free():
     free = int(free / 1024)
     total = int(total / 1024)
     used = int(total - free)
-    print(f"RAM: {used} kB used of {total} ({free} free)")
+    print(f"RAM(kB) - Total: {total} Used: {used} Free: {free}")
 
 
 def cpuinfo():
@@ -87,16 +87,19 @@ def cpuinfo():
         mcu_type = "Xtensa LX6 Dual-core"
     else:
         mcu_type = cpu_type
-        
-    print(f"CPU Frequency: {cpu_freq / 1_000_000} MHz")
+
+    print(f"CPU Frequency: {int(cpu_freq / 1_000_000)} MHz")
     print(f"Chip/Platform: {mcu_type}")
     print(f"Firmware Build: {sys_info.version}")
     try:
         raw = esp32.raw_temperature()
-        print(f"Internal Die Temp: {raw}°F {(raw - 32) * 5/9}°C")
-    except Exception as e:
+        ctemp = int((raw - 32) * 5/9)
+        print(f"Internal Die Temp: {raw}°F {ctemp}°C")
+    except Exception:
         raw = esp32.mcu_temperature()
-        print(f"Internal Die Temp: {raw * 9/5 + 32}°F {raw}°C")
+        ftemp = int(raw * 9/5 + 32)
+        print(f"Internal Die Temp: {ftemp}°F {raw}°C")
+
 
 cpuinfo()
 df()
